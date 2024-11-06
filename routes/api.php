@@ -16,6 +16,7 @@ Route::middleware(['auth:sanctum'])->get('/admin/verify-token', function (Reques
     return response()->json(['status' => true]);
 });
 
+
 Route::post('/admin/login', [AuthenticationController::class, 'authenticate']);
 
 
@@ -28,6 +29,9 @@ Route::group(['middleware' => ['auth:sanctum']], function(){
     // Service Routes
     Route::get('/services', [ServiceController::class, 'index']);
     Route::post('/services', [ServiceController::class, 'store']);
+    Route::put('/services/{id}', [ServiceController::class, 'update']);
+    Route::delete('/services/{id}', [ServiceController::class, 'destroy']);
+    Route::get('/services/{id}', [ServiceController::class, 'show']);
     Route::post('/temp-images', [TempImageController::class, 'store']);
 
 });
