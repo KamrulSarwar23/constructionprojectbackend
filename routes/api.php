@@ -10,6 +10,10 @@ Route::get('/user', function (Request $request) {
 })->middleware('auth:sanctum');
 
 
+Route::middleware(['auth:sanctum'])->get('/admin/verify-token', function (Request $request) {
+    return response()->json(['status' => true]);
+});
+
 Route::post('/admin/login', [AuthenticationController::class, 'authenticate']);
 
 Route::group(['middleware' => ['auth:sanctum']], function(){
