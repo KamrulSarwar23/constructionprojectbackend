@@ -6,11 +6,14 @@ use App\Http\Controllers\admin\ServiceController;
 use App\Http\Controllers\AuthenticationController;
 use App\Http\Controllers\admin\DashboardController;
 use App\Http\Controllers\admin\TempImageController;
+use App\Http\Controllers\Frontend\ServiceController as FrontendServiceController;
 
 Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:sanctum');
 
+Route::get('/latest-services', [FrontendServiceController::class, 'LatestService']);
+Route::get('/all-services', [FrontendServiceController::class, 'AllService']);
 
 Route::middleware(['auth:sanctum'])->get('/admin/verify-token', function (Request $request) {
     return response()->json(['status' => true]);
@@ -35,3 +38,4 @@ Route::group(['middleware' => ['auth:sanctum']], function(){
     Route::post('/temp-images', [TempImageController::class, 'store']);
 
 });
+
