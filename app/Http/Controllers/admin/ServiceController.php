@@ -129,7 +129,7 @@ class ServiceController extends Controller
     public function update(Request $request, string $id)
     {
 
-        $service = Service::find($id);
+        $service = Service::findOrFail($id);
 
         if ($service == null) {
             return response()->json([
@@ -138,6 +138,7 @@ class ServiceController extends Controller
             ]);
         }
         $request->merge(['slug' => Str::slug($request->slug)]);
+        
         $validator = Validator::make($request->all(), [
             'title' => 'required',
             'slug' => 'required|unique:services,slug,' . $id . ',id',
@@ -210,11 +211,19 @@ class ServiceController extends Controller
     {
         $service = Service::find($id);
 
+        $oldImage = $service->image;
+
         if ($service == null) {
             return response()->json([
                 'status' => false,
                 'errors' => 'Service Not Found'
             ]);
+        }
+
+        if ($oldImage != null) {
+
+            File::delete(public_path('uploads/services/large/' . $oldImage));
+            File::delete(public_path('uploads/services/small/' . $oldImage));
         }
 
         $service->delete();

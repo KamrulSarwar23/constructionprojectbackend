@@ -33,15 +33,21 @@ Route::group(['middleware' => ['auth:sanctum']], function(){
     // Service Routes
     Route::get('/services', [ServiceController::class, 'index']);
     Route::post('/services', [ServiceController::class, 'store']);
+    Route::get('/services/{id}', [ServiceController::class, 'show']);
     Route::put('/services/{id}', [ServiceController::class, 'update']);
     Route::delete('/services/{id}', [ServiceController::class, 'destroy']);
-    Route::get('/services/{id}', [ServiceController::class, 'show']);
+
+
     Route::post('/temp-images', [TempImageController::class, 'store']);
 
 
      // Project Routes
      Route::get('/projects', [ProjectController::class, 'index']);
      Route::post('/projects', [ProjectController::class, 'store']);
+     Route::get('/projects/{id}', [ProjectController::class, 'show']);
+     Route::put('/projects/{id}', [ProjectController::class, 'update']);
+     Route::delete('/projects/{id}', [ProjectController::class, 'destroy']);
+
 
 });
 
