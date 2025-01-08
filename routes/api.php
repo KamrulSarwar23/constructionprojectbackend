@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\admin\ArticleController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\admin\ServiceController;
@@ -7,6 +8,7 @@ use App\Http\Controllers\AuthenticationController;
 use App\Http\Controllers\admin\DashboardController;
 use App\Http\Controllers\admin\ProjectController;
 use App\Http\Controllers\admin\TempImageController;
+use App\Http\Controllers\Frontend\ProjectController as FrontendProjectController;
 use App\Http\Controllers\Frontend\ServiceController as FrontendServiceController;
 
 Route::get('/user', function (Request $request) {
@@ -15,6 +17,9 @@ Route::get('/user', function (Request $request) {
 
 Route::get('/latest-services', [FrontendServiceController::class, 'LatestService']);
 Route::get('/all-services', [FrontendServiceController::class, 'AllService']);
+
+Route::get('/latest-projects', [FrontendProjectController::class, 'LatestService']);
+Route::get('/all-projects', [FrontendProjectController::class, 'AllService']);
 
 Route::middleware(['auth:sanctum'])->get('/admin/verify-token', function (Request $request) {
     return response()->json(['status' => true]);
@@ -48,6 +53,13 @@ Route::group(['middleware' => ['auth:sanctum']], function(){
      Route::put('/projects/{id}', [ProjectController::class, 'update']);
      Route::delete('/projects/{id}', [ProjectController::class, 'destroy']);
 
+
+    // Article Routes
+     Route::get('/articles', [ArticleController::class, 'index']);
+     Route::post('/articles', [ArticleController::class, 'store']);
+     Route::get('/articles/{id}', [ArticleController::class, 'show']);
+     Route::put('/articles/{id}', [ArticleController::class, 'update']);
+     Route::delete('/articles/{id}', [ArticleController::class, 'destroy']);
 
 });
 

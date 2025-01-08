@@ -191,6 +191,7 @@ class ProjectController extends Controller
 
     }
 
+    
     public function destroy(string $id){
 
         $project = Project::findOrFail($id);
