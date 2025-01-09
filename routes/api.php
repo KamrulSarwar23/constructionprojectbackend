@@ -8,6 +8,8 @@ use App\Http\Controllers\AuthenticationController;
 use App\Http\Controllers\admin\DashboardController;
 use App\Http\Controllers\admin\ProjectController;
 use App\Http\Controllers\admin\TempImageController;
+use App\Http\Controllers\admin\TestimonialController;
+use App\Http\Controllers\Frontend\ArticleController as FrontendArticleController;
 use App\Http\Controllers\Frontend\ProjectController as FrontendProjectController;
 use App\Http\Controllers\Frontend\ServiceController as FrontendServiceController;
 
@@ -15,11 +17,18 @@ Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:sanctum');
 
+// Service Routes
 Route::get('/latest-services', [FrontendServiceController::class, 'LatestService']);
 Route::get('/all-services', [FrontendServiceController::class, 'AllService']);
 
+// Project Routes
 Route::get('/latest-projects', [FrontendProjectController::class, 'LatestService']);
 Route::get('/all-projects', [FrontendProjectController::class, 'AllService']);
+
+// Article Routes
+Route::get('/latest-articles', [FrontendArticleController::class, 'LatestService']);
+Route::get('/all-articles', [FrontendArticleController::class, 'AllService']);
+
 
 Route::middleware(['auth:sanctum'])->get('/admin/verify-token', function (Request $request) {
     return response()->json(['status' => true]);
@@ -60,6 +69,14 @@ Route::group(['middleware' => ['auth:sanctum']], function(){
      Route::get('/articles/{id}', [ArticleController::class, 'show']);
      Route::put('/articles/{id}', [ArticleController::class, 'update']);
      Route::delete('/articles/{id}', [ArticleController::class, 'destroy']);
+
+
+      // Testimonial Routes
+      Route::get('/testimonials', [TestimonialController::class, 'index']);
+      Route::post('/testimonials', [TestimonialController::class, 'store']);
+      Route::get('/testimonials/{id}', [TestimonialController::class, 'show']);
+      Route::put('/testimonials/{id}', [TestimonialController::class, 'update']);
+      Route::delete('/testimonials/{id}', [TestimonialController::class, 'destroy']);
 
 });
 

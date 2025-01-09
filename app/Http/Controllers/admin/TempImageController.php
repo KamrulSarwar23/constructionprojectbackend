@@ -28,6 +28,7 @@ class TempImageController extends Controller
         $image = $request->image;
         $ext = $image->getClientOriginalExtension();
         $imageName = strtotime('now') . '.' . $ext;
+        
         $model = new TempImage();
         $model->name = $imageName;
         $model->save();
@@ -36,6 +37,7 @@ class TempImageController extends Controller
 
         $sourcePath = public_path('uploads/temp/'.$imageName);
         $destPath = public_path('uploads/temp/thumb/'.$imageName);
+
         $manager = new ImageManager(Driver::class);
         $image = $manager->read($sourcePath);
         $image->coverDown(300, 300);
