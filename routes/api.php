@@ -7,11 +7,14 @@ use App\Http\Controllers\admin\ServiceController;
 use App\Http\Controllers\AuthenticationController;
 use App\Http\Controllers\admin\DashboardController;
 use App\Http\Controllers\admin\ProjectController;
+use App\Http\Controllers\admin\TeamMemberController;
 use App\Http\Controllers\admin\TempImageController;
 use App\Http\Controllers\admin\TestimonialController;
 use App\Http\Controllers\Frontend\ArticleController as FrontendArticleController;
 use App\Http\Controllers\Frontend\ProjectController as FrontendProjectController;
 use App\Http\Controllers\Frontend\ServiceController as FrontendServiceController;
+use App\Http\Controllers\Frontend\TeamMemberController as FrontendTeamMemberController;
+use App\Http\Controllers\Frontend\TestimonialController as FrontendTestimonialController;
 
 Route::get('/user', function (Request $request) {
     return $request->user();
@@ -29,6 +32,9 @@ Route::get('/all-projects', [FrontendProjectController::class, 'AllService']);
 Route::get('/latest-articles', [FrontendArticleController::class, 'LatestService']);
 Route::get('/all-articles', [FrontendArticleController::class, 'AllService']);
 
+Route::get('/all-testimonials', [FrontendTestimonialController::class, 'AllTestimonials']);
+
+Route::get('/all-team-members', [FrontendTeamMemberController::class, 'AllTeamMembers']);
 
 Route::middleware(['auth:sanctum'])->get('/admin/verify-token', function (Request $request) {
     return response()->json(['status' => true]);
@@ -77,6 +83,14 @@ Route::group(['middleware' => ['auth:sanctum']], function(){
       Route::get('/testimonials/{id}', [TestimonialController::class, 'show']);
       Route::put('/testimonials/{id}', [TestimonialController::class, 'update']);
       Route::delete('/testimonials/{id}', [TestimonialController::class, 'destroy']);
+
+
+        // Team Member Routes
+        Route::get('/teams', [TeamMemberController::class, 'index']);
+        Route::post('/teams', [TeamMemberController::class, 'store']);
+        Route::get('/teams/{id}', [TeamMemberController::class, 'show']);
+        Route::put('/teams/{id}', [TeamMemberController::class, 'update']);
+        Route::delete('/teams/{id}', [TeamMemberController::class, 'destroy']);
 
 });
 

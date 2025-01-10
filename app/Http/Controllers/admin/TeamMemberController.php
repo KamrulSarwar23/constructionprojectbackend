@@ -3,24 +3,23 @@
 namespace App\Http\Controllers\admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\TempImage;
-use App\Models\Testimonial;
+use App\Models\TeamMember;
 use Illuminate\Http\Request;
+use App\Models\TempImage;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Validator;
 use Intervention\Image\Drivers\Gd\Driver;
 use Intervention\Image\ImageManager;
 
-
-class TestimonialController extends Controller
+class TeamMemberController extends Controller
 {
     public function index()
     {
-        $testimonials = Testimonial::orderby('created_at', 'DESC')->get();
+        $teams = TeamMember::orderby('created_at', 'DESC')->get();
 
         return response()->json([
             'status' => true,
-            'data' => $testimonials
+            'data' => $teams
         ]);
     }
 
@@ -28,9 +27,8 @@ class TestimonialController extends Controller
     {
 
         $validator = Validator::make($request->all(), [
-            'testimonial' => 'required',
-            'citation' => 'required',
-            'designation' => 'required',
+            'name' => 'required',
+            'job_title' => 'required',
         ]);
 
         if ($validator->fails()) {
@@ -40,12 +38,12 @@ class TestimonialController extends Controller
             ]);
         }
 
-        $testimonial = new Testimonial();
-        $testimonial->testimonial = $request->testimonial;
-        $testimonial->citation = $request->citation;
-        $testimonial->designation = $request->designation;
-        $testimonial->status = $request->status;
-        $testimonial->save();
+        $team = new TeamMember();
+        $team->name = $request->name;
+        $team->job_title = $request->job_title;
+        $team->linkedin_url = $request->linkedin_url;
+        $team->status = $request->status;
+        $team->save();
 
         // Save Temp Image Here
         if ($request->imageId > 0) {
@@ -57,53 +55,53 @@ class TestimonialController extends Controller
                 $extArray = explode('.', $tempImage->name);
                 $ext = last($extArray);
 
-                $fileName = strtotime('now') . $testimonial->id . '.' . $ext;
+                $fileName = strtotime('now') . $team->id . '.' . $ext;
 
                 // Create small thumbnail here
                 $sourcePath = public_path('uploads/temp/' . $tempImage->name);
 
-                $destPath = public_path('uploads/testimonials/' . $fileName);
+                $destPath = public_path('uploads/teams/' . $fileName);
                 $manager = new ImageManager(Driver::class);
                 $image = $manager->read($sourcePath);
                 $image->coverDown(300, 300);
                 $image->save($destPath);
 
-                $testimonial->image = $fileName;
-                $testimonial->save();
+                $team->image = $fileName;
+                $team->save();
             }
         }
 
         return response()->json([
             'status' => true,
-            'message' => "Testimonials Added Successfully"
+            'message' => "Team Member Added Successfully"
         ]);
     }
 
     public function show(string $id){
 
-        $testimonial = Testimonial::find($id);
+        $team = TeamMember::find($id);
 
-        if ($testimonial == null) {
+        if ($team == null) {
             return response()->json([
                 'status' => false,
-                'errors' => 'Testimonial Not Found'
+                'errors' => 'Team Member Not Found'
             ]);
         }
 
         return response()->json([
             'status' => true,
-            'data' => $testimonial
+            'data' => $team
         ]);
     }
 
 
     public function update(Request $request, string $id){
 
-        $testimonial = Testimonial::find($id);
+        $team = TeamMember::find($id);
 
         $validator = Validator::make($request->all(), [
-            'testimonial' => 'required',
-            'citation' => 'required'
+            'name' => 'required',
+            'job_title' => 'required',
         ]);
 
         if ($validator->fails()) {
@@ -113,16 +111,16 @@ class TestimonialController extends Controller
             ]);
         }
 
-        $testimonial->testimonial = $request->testimonial;
-        $testimonial->citation = $request->citation;
-        $testimonial->designation = $request->designation;
-        $testimonial->status = $request->status;
-        $testimonial->save();
+        $team->name = $request->name;
+        $team->job_title = $request->job_title;
+        $team->linkedin_url = $request->linkedin_url;
+        $team->status = $request->status;
+        $team->save();
 
         // Save Temp Image Here
         if ($request->imageId > 0) {
 
-            $oldImage = $testimonial->image;
+            $oldImage = $team->image;
             $tempImage =  TempImage::find($request->imageId);
 
             if ($tempImage != null) {
@@ -130,29 +128,29 @@ class TestimonialController extends Controller
                 $extArray = explode('.', $tempImage->name);
                 $ext = last($extArray);
 
-                $fileName = strtotime('now') . $testimonial->id . '.' . $ext;
+                $fileName = strtotime('now') . $team->id . '.' . $ext;
 
                 // Create small thumbnail here
                 $sourcePath = public_path('uploads/temp/' . $tempImage->name);
 
-                $destPath = public_path('uploads/testimonials/' . $fileName);
+                $destPath = public_path('uploads/teams/' . $fileName);
                 $manager = new ImageManager(Driver::class);
                 $image = $manager->read($sourcePath);
                 $image->coverDown(300, 300);
                 $image->save($destPath);
 
-                $testimonial->image = $fileName;
-                $testimonial->save();
+                $team->image = $fileName;
+                $team->save();
 
                 if ($oldImage != '') {
-                    File::delete(public_path('uploads/testimonials/' . $oldImage));
+                    File::delete(public_path('uploads/teams/' . $oldImage));
                 }
             }
         }
 
         return response()->json([
             'status' => true,
-            'message' => "Testimonials Updated Successfully"
+            'message' => "Team Member Updated Successfully"
         ]);
 
     }
@@ -160,27 +158,27 @@ class TestimonialController extends Controller
 
     public function destroy(string $id){
 
-        $testimonial = Testimonial::find($id);
+        $team = TeamMember::find($id);
 
-        $oldImage = $testimonial->image;
+        $oldImage = $team->image;
 
-        if ($testimonial == null) {
+        if ($team == null) {
             return response()->json([
                 'status' => false,
-                'errors' => 'Testimonial Not Found'
+                'errors' => 'Team Not Found'
             ]);
         }
 
         if ($oldImage != null) {
 
-            File::delete(public_path('uploads/testimonials/' . $oldImage));
+            File::delete(public_path('uploads/teams/' . $oldImage));
         }
 
-        $testimonial->delete();
+        $team->delete();
 
         return response()->json([
             'status' => true,
-            'message' => "Testimonial Deleted Successfully"
+            'message' => "Team Member Deleted Successfully"
         ]);
     }
 }
