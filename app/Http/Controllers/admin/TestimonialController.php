@@ -16,7 +16,7 @@ class TestimonialController extends Controller
 {
     public function index()
     {
-        $testimonials = Testimonial::orderby('created_at', 'DESC')->get();
+        $testimonials = Testimonial::orderby('created_at', 'DESC')->paginate(5);
 
         return response()->json([
             'status' => true,

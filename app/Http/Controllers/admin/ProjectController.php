@@ -16,7 +16,7 @@ use Illuminate\Support\Facades\File;
 class ProjectController extends Controller
 {
     public function index(){
-        $projects = Project::orderBy('created_at', 'DESC')->get();
+        $projects = Project::orderBy('created_at', 'DESC')->paginate(5);
 
         return response()->json([
             'status' => true,
@@ -191,7 +191,7 @@ class ProjectController extends Controller
 
     }
 
-    
+
     public function destroy(string $id){
 
         $project = Project::findOrFail($id);

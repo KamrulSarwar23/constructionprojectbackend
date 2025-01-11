@@ -15,7 +15,7 @@ class TeamMemberController extends Controller
 {
     public function index()
     {
-        $teams = TeamMember::orderby('created_at', 'DESC')->get();
+        $teams = TeamMember::orderby('created_at', 'DESC')->paginate(5);
 
         return response()->json([
             'status' => true,

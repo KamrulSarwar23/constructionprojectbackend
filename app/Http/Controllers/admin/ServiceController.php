@@ -19,7 +19,7 @@ class ServiceController extends Controller
      */
     public function index()
     {
-        $services = Service::orderby('created_at', 'DESC')->get();
+        $services = Service::orderby('created_at', 'DESC')->paginate(5);
 
         return response()->json([
             'status' => true,
@@ -138,7 +138,7 @@ class ServiceController extends Controller
             ]);
         }
         $request->merge(['slug' => Str::slug($request->slug)]);
-        
+
         $validator = Validator::make($request->all(), [
             'title' => 'required',
             'slug' => 'required|unique:services,slug,' . $id . ',id',

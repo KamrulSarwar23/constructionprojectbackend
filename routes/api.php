@@ -11,6 +11,7 @@ use App\Http\Controllers\admin\TeamMemberController;
 use App\Http\Controllers\admin\TempImageController;
 use App\Http\Controllers\admin\TestimonialController;
 use App\Http\Controllers\Frontend\ArticleController as FrontendArticleController;
+use App\Http\Controllers\Frontend\ContactController;
 use App\Http\Controllers\Frontend\ProjectController as FrontendProjectController;
 use App\Http\Controllers\Frontend\ServiceController as FrontendServiceController;
 use App\Http\Controllers\Frontend\TeamMemberController as FrontendTeamMemberController;
@@ -40,6 +41,11 @@ Route::get('/all-testimonials', [FrontendTestimonialController::class, 'AllTesti
 
 // Team Member Routes
 Route::get('/all-team-members', [FrontendTeamMemberController::class, 'AllTeamMembers']);
+
+
+// Testimonial Routes
+Route::post('/contact-now', [ContactController::class, 'index']);
+
 
 Route::middleware(['auth:sanctum'])->get('/admin/verify-token', function (Request $request) {
     return response()->json(['status' => true]);
