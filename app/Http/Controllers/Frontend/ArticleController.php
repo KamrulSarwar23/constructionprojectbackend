@@ -27,4 +27,22 @@ class ArticleController extends Controller
             'data' => $articles
         ]);
     }
+
+    public function BlogDetails(string $id){
+
+        $article = Article::findOrFail($id);
+
+        if ($article == null) {
+            return response()->json([
+                'status' => false,
+                'errors' => 'Article Not Found'
+            ]);
+        }
+
+        return response()->json([
+            'status' => true,
+            'data' => $article
+        ]);
+
+    }
 }

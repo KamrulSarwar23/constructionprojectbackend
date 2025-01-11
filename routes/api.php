@@ -23,17 +23,22 @@ Route::get('/user', function (Request $request) {
 // Service Routes
 Route::get('/latest-services', [FrontendServiceController::class, 'LatestService']);
 Route::get('/all-services', [FrontendServiceController::class, 'AllService']);
+Route::get('/service-details/{id}', [FrontendServiceController::class, 'ServiceDetails']);
 
 // Project Routes
 Route::get('/latest-projects', [FrontendProjectController::class, 'LatestService']);
 Route::get('/all-projects', [FrontendProjectController::class, 'AllService']);
+Route::get('/project-details/{id}', [FrontendProjectController::class, 'ProjectDetail']);
 
 // Article Routes
 Route::get('/latest-articles', [FrontendArticleController::class, 'LatestService']);
 Route::get('/all-articles', [FrontendArticleController::class, 'AllService']);
+Route::get('/blog-details/{id}', [FrontendArticleController::class, 'BlogDetails']);
 
+// Testimonial Routes
 Route::get('/all-testimonials', [FrontendTestimonialController::class, 'AllTestimonials']);
 
+// Team Member Routes
 Route::get('/all-team-members', [FrontendTeamMemberController::class, 'AllTeamMembers']);
 
 Route::middleware(['auth:sanctum'])->get('/admin/verify-token', function (Request $request) {

@@ -29,4 +29,22 @@ class ServiceController extends Controller
 
         }
 
+        public function ServiceDetails(string $id){
+
+            $service = Service::findOrFail($id);
+
+            if ($service == null) {
+                return response()->json([
+                    'status' => false,
+                    'errors' => 'Service Not Found'
+                ]);
+            }
+
+            return response()->json([
+                'status' => true,
+                'data' => $service
+            ]);
+
+        }
+
 }
