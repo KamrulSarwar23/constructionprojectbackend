@@ -17,15 +17,22 @@ class ServiceController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $services = Service::orderby('created_at', 'DESC')->paginate(5);
+        $query = Service::query();
+
+        if ($request->has('search') && !empty($request->search)) {
+            $query->where('title', 'like', '%' . $request->search . '%');
+        }
+
+        $services = $query->orderBy('created_at', 'DESC')->paginate(5);
 
         return response()->json([
             'status' => true,
             'data' => $services
         ]);
     }
+
 
 
     /**
